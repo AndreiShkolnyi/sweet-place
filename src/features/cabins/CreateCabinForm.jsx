@@ -28,7 +28,10 @@ function CreateCabinForm({ cabinToEdit = {}, onSuccessHandler }) {
 
   const onError = () => {};
   return (
-    <Form onSubmit={handleSubmit(onSubmit, onError)}>
+    <Form
+      type={onSuccessHandler ? "modal" : "regular"}
+      onSubmit={handleSubmit(onSubmit, onError)}
+    >
       <FormRow label='Cabin name' error={errors?.name?.message}>
         <Input
           type='text'
@@ -116,7 +119,7 @@ function CreateCabinForm({ cabinToEdit = {}, onSuccessHandler }) {
         <Button
           variation='secondary'
           type='reset'
-          onClick={onSuccessHandler}
+          onClick={() => onSuccessHandler?.()}
           disabled={isWorking}
         >
           Cancel

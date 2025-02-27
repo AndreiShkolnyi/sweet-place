@@ -1,10 +1,11 @@
 import styled from "styled-components";
 import { formatCurrency } from "../../utils/helpers";
-import { useState } from "react";
 import CreateCabinForm from "./CreateCabinForm";
 import { useDeleteCabin } from "./model/hooks/useDeleteCabin";
 import { HiSquare2Stack, HiPencil, HiTrash } from "react-icons/hi2";
 import { useCreateOrEditCabin } from "./model/hooks/useCreateOrEditCabin";
+import Modal from "../../ui/Modal";
+import ConfirmDelete from "../../ui/ConfirmDelete";
 
 const TableRow = styled.div`
   display: grid;
@@ -46,7 +47,6 @@ const Discount = styled.div`
 `;
 
 const CabinRow = ({ cabin }) => {
-  const [showForm, setShowForm] = useState(false);
   const {
     id: cabinId,
     image,
@@ -87,20 +87,32 @@ const CabinRow = ({ cabin }) => {
           <button onClick={onDuplicateHandler} disabled={isDuplicating}>
             <HiSquare2Stack />
           </button>
-          <button onClick={() => setShowForm(!showForm)} disabled={isDeleting}>
-            <HiPencil />
-          </button>
-          <button onClick={() => mutate(cabinId)} disabled={isDeleting}>
-            <HiTrash />
-          </button>
+          <Modal>
+            <Modal.Open opens='edit-cabin'>
+              <button disabled={isDeleting}>
+                <HiPencil />
+              </button>
+            </Modal.Open>
+            <Modal.Window name='edit-cabin'>
+              <CreateCabinForm cabinToEdit={cabin} />
+            </Modal.Window>
+          </Modal>
+          <Modal>
+            <Modal.Open opens='delete-cabin'>
+              <button>
+                <HiTrash />
+              </button>
+            </Modal.Open>
+            <Modal.Window name='delete-cabin'>
+              <ConfirmDelete
+                onConfirm={() => mutate(cabinId)}
+                resourceName='cabins'
+                disabled={isDeleting}
+              />
+            </Modal.Window>
+          </Modal>
         </div>
       </TableRow>
-      {showForm && (
-        <CreateCabinForm
-          cabinToEdit={cabin}
-          onSuccessHandler={() => setShowForm(false)}
-        />
-      )}
     </>
   );
 };
