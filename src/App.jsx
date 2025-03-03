@@ -19,7 +19,7 @@ import Booking from "./pages/Booking";
 import Checkin from "./pages/Checkin";
 
 import AppLayout from "./ui/layouts/AppLayout";
-import { ProtectedRoute } from "./ui/pROTECTEDrOUTE.JSX";
+import { ProtectedRoute } from "./ui/ProtectedRoute";
 
 const queryClient = new QueryClient({
   defaultOptions: {
